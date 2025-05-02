@@ -37,7 +37,7 @@
     </table>
 
     <div style="margin-top: 20px; display: flex; justify-content: space-between;">
-        <a href="{% url 'todo_update' todo.id %}" style="
+        <a href="{% url 'cbv_todo_update' todo.id %}" style="
             padding: 8px 16px;
             background-color: #007bff;
             color: white;
@@ -45,14 +45,18 @@
             border-radius: 5px;">
             수정하기
         </a>
-        <a href="{% url 'todo_delete' todo.id %}" style="
-            padding: 8px 16px;
-            background-color: #dc3545;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;">
-            삭제하기
-        </a>
+        <form action="{% url 'cbv_todo_delete' todo.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" style="
+                padding: 8px 16px;
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;">
+                삭제하기
+            </button>
+        </form>
     </div>
 </div>
 {% endblock %}

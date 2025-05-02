@@ -13,7 +13,7 @@
             <h1 style="text-align: center; color: #333;">{{ request.user.username }}의 Todo List</h1>
 
             <div style="text-align: right; margin-bottom: 10px;">
-                <a href="{% url 'todo_create' %}" style="
+                <a href="{% url 'cbv_todo_create' %}" style="
                     padding: 8px 12px;
                     background-color: #007bff;
                     color: white;
@@ -45,7 +45,7 @@
                         background: #eaeaea;
                         border-radius: 5px;
                         transition: background 0.3s;">
-                        <a href="{% url 'todo_info' todo.id %}" style="color: #333; text-decoration: none;">
+                        <a href="{% url 'cbv_todo_info' todo.id %}" style="color: #333; text-decoration: none;">
                             {{ todo.title }}
                         </a>
                     </li>
