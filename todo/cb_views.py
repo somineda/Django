@@ -5,6 +5,7 @@ from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from todo.forms import TodoForm, TodoUpdateForm
 
 from todo.models import Todo, Comment
 from todo.forms import CommentForm
@@ -54,7 +55,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date']
+    form_class = TodoForm
     template_name = 'todo/todo_create.html'
 
     def form_valid(self, form):
@@ -67,7 +68,7 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
+    form_class = TodoUpdateForm
     template_name = 'todo/todo_update.html'
 
     def get_object(self, queryset=None):
