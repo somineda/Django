@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from todo.views import todo_list, todo_info
+from todo.views import todo_list, todo_info, todo_update, todo_delete, todo_create
 from users import views as users_views
 
 urlpatterns = [
@@ -28,4 +28,10 @@ urlpatterns = [
     path('accounts/login/', users_views.login, name='login'),  # 로그인
     path('accounts/signup/', users_views.sign_up, name='signup'),  # 회원가입
     path('accounts/', include('django.contrib.auth.urls')),  # logout 등 기본 auth 라우팅
+    path('accounts/login/', users_views.login, name='login'),
+    path('accounts/signup/', users_views.sign_up, name='signup'),
+    path('todo/create/', todo_create, name='todo_create'),
+    path('todo/<int:todo_id>/update/', todo_update, name='todo_update'),  
+    path('todo/<int:todo_id>/delete/', todo_delete, name='todo_delete'),
+
 ]

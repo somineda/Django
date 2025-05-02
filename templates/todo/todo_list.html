@@ -1,0 +1,76 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+    <div class="container" style="
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+        {% if request.user.is_authenticated %}
+            <h1 style="text-align: center; color: #333;">{{ request.user.username }}의 Todo List</h1>
+
+            <div style="text-align: right; margin-bottom: 10px;">
+                <a href="{% url 'todo_create' %}" style="
+                    padding: 8px 12px;
+                    background-color: #007bff;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    font-size: 14px;">+ 새로운 Todo</a>
+            </div>
+
+            <form method="GET" style="margin-bottom: 15px; display: flex; gap: 10px;">
+                <input type="text" name="q" placeholder="검색..." value="{{ request.GET.q }}" style="
+                    flex: 1;
+                    padding: 8px;
+                    border-radius: 4px;
+                    border: 1px solid #ccc;">
+                <button type="submit" style="
+                    padding: 8px 12px;
+                    border: none;
+                    background-color: #007bff;
+                    color: white;
+                    border-radius: 4px;
+                    cursor: pointer;">검색</button>
+            </form>
+
+            <ul style="list-style-type: none; padding: 0;">
+                {% for todo in page_obj %}
+                    <li style="
+                        padding: 10px;
+                        margin: 5px 0;
+                        background: #eaeaea;
+                        border-radius: 5px;
+                        transition: background 0.3s;">
+                        <a href="{% url 'todo_info' todo.id %}" style="color: #333; text-decoration: none;">
+                            {{ todo.title }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>할 일이 없습니다.</li>
+                {% endfor %}
+            </ul>
+
+            {% if page_obj.has_other_pages %}
+                <div style="margin-top: 20px; text-align: center;">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
+                    {% endif %}
+
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        {% else %}
+            <h1 style="text-align: center; color: #333;">로그인이 필요합니다</h1>
+            <p style="text-align: center;">To-do 목록을 보려면 <a href="{% url 'login' %}">로그인</a> 또는 <a href="{% url 'signup' %}">회원가입</a>을 해주세요.</p>
+        {% endif %}
+    </div>
+{% endblock %}
