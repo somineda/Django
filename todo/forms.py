@@ -1,16 +1,31 @@
 from django import forms
-from todo.models import Todo
+from todo.models import Todo, Comment
 
 
-# 생성(Create) 용 폼 - 완료 여부는 제외
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ["title", "description", "start_date", "end_date"]
 
 
-# 수정(Update) 용 폼 - 완료 여부(is_completed) 포함
 class TodoUpdateForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ["title", "description", "start_date", "end_date", "is_completed"]
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['message']
+        labels = {
+            'message': '내용',
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'rows': 3,
+                'cols': 40,
+                'class': 'form-control',
+                'placeholder': '댓글을 입력하세요...',
+            })
+        }
