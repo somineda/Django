@@ -35,7 +35,7 @@
             {% if key not in 'title id user_id _state _prefetched_objects_cache' %}
                 <tr>
                     <th class="bg-light text-capitalize">{{ key }}</th>
-                    <td>{{ value }}</td>
+                    <td>{{ value|safe }}</td>
                 </tr>
             {% endif %}
         {% endfor %}

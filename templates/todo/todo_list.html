@@ -21,10 +21,17 @@
 
         <ul class="list-group">
             {% for todo in page_obj %}
-                <li class="list-group-item">
-                    <a href="{% url 'cbv_todo_info' todo.id %}" class="text-decoration-none text-dark">
-                        [{{ todo.user.username }}] {{ todo.title }}
-                    </a>
+                <li class="list-group-item d-flex align-items-center">
+                 <!-- 썸네일 이미지 -->
+                    <img src="{{ todo.thumbnail.url }}" alt="썸네일" width="60" height="60" class="me-3 rounded" style="object-fit: cover;">
+                    <div>
+                        <a href="{% url 'cbv_todo_info' todo.id %}" class="text-decoration-none text-dark fw-bold">
+                            [{{ todo.user.username }}] {{ todo.title }}
+                        </a>
+                        {% if todo.is_completed %}
+                            <span class="badge bg-success ms-2">✅ Completed</span>
+                        {% endif %}
+                    </div>
                 </li>
             {% empty %}
                 <li class="list-group-item text-muted">할 일이 없습니다.</li>

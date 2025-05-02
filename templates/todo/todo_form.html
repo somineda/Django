@@ -1,0 +1,21 @@
+{% extends 'todo/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">{% block title %}Todo 등록 / 수정{% endblock %}</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="p-4 border rounded bg-light">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+            <div class="alert alert-danger mt-3">
+                <strong>오류:</strong> 입력 내용을 확인해주세요.
+            </div>
+        {% endif %}
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">저장하기</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
