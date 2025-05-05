@@ -1,44 +1,73 @@
 {% extends 'todo/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container mt-5">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        max-width: 40vw;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .pagination p {
+        color: gray;
+        text-decoration: none;
+        transition: background-color .3s;
+        margin: 0;
+    }
+    .pagination p:hover {
+        background-color: #ddd;
+        border-radius: 5px;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="container mt-lg-5">
     {% if request.user.is_authenticated %}
         <div class="d-flex justify-content-between align-items-center mb-3">
             {% if not request.user.is_staff %}
                 <h1>{{ request.user.username }}'s Todo List</h1>
             {% else %}
-                <h1>All To Do List (By Admin)</h1>
+                <h1>All To Do List (By. Admin)</h1>
             {% endif %}
-            <a href="{% url 'cbv_todo_create' %}" class="btn btn-success">+ 생성하기</a>
+            <button class="btn btn-success" onclick="location.href='{% url 'cbv_todo_create' %}'">생성하기</button>
         </div>
 
-        <form method="GET" class="mb-4">
+        <form method="GET" class="mb-3">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="제목 또는 내용을 입력하세요." value="{{ request.GET.q }}">
-                <button type="submit" class="btn btn-primary">검색</button>
+                <input type="text" class="form-control" placeholder="제목 또는 내용을 입력하세요." name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </form>
 
-        <ul class="list-group">
+        <div class="list-group mb-3">
             {% for todo in page_obj %}
-                <li class="list-group-item d-flex align-items-center">
-                 <!-- 썸네일 이미지 -->
-                    <img src="{{ todo.thumbnail.url }}" alt="썸네일" width="60" height="60" class="me-3 rounded" style="object-fit: cover;">
-                    <div>
-                        <a href="{% url 'cbv_todo_info' todo.id %}" class="text-decoration-none text-dark fw-bold">
-                            [{{ todo.user.username }}] {{ todo.title }}
-                        </a>
-                        {% if todo.is_completed %}
-                            <span class="badge bg-success ms-2">✅ Completed</span>
-                        {% endif %}
-                    </div>
-                </li>
-            {% empty %}
-                <li class="list-group-item text-muted">할 일이 없습니다.</li>
-            {% endfor %}
-        </ul>
+                <div class="list-group-item list-group-item-action d-flex align-items-center">
+                    {% if todo.thumbnail %}
+                        <img class="img-thumbnail" src="{{ todo.thumbnail.url }}" alt="썸네일이미지" style="width: 100px; height: 100px; object-fit: contain;">
+                    {% elif todo.description_first_image %}
+                        <img class="img-thumbnail" src="{{ todo.description_first_image }}" alt="설명 썸네일" style="width: 100px; height: 100px; object-fit: contain;">
+                    {% else %}
+                        <img class="img-thumbnail" src="{% static 'default/thumb.jpg' %}" alt="기본 썸네일" style="width: 100px; height: 100px; object-fit: contain;">
+                    {% endif %}
 
-        <!-- 페이지네이션 include -->
+                    <a class="text-decoration-none text-black ms-3" href="{% url 'cbv_todo_info' todo.id %}">
+                        [{{ todo.user.username }}] {{ todo.title }}{% if todo.is_completed %} (Completed){% endif %}
+                    </a>
+                </div>
+            {% empty %}
+                <div class="list-group-item text-muted">할 일이 없습니다.</div>
+            {% endfor %}
+        </div>
+
         {% include 'todo/pagination.html' %}
     {% else %}
         <div class="text-center">

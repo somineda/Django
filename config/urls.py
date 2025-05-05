@@ -18,8 +18,9 @@ urlpatterns = [
     path('todo/create/', todo_create, name='todo_create'),
 
     # Auth
-    path('accounts/login/', users_views.login, name='login'),
-    path('accounts/signup/', users_views.sign_up, name='signup'),
+    #path('accounts/login/', users_views.login, name='login'),
+    #path('accounts/signup/', users_views.sign_up, name='signup'),
+    path('users/', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 
     # ✅ CBV URL include

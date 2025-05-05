@@ -5,17 +5,18 @@ from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
-from todo.forms import TodoForm, TodoUpdateForm
 
 from todo.models import Todo, Comment
-from todo.forms import CommentForm
+from todo.forms import TodoForm, TodoUpdateForm, CommentForm
 
 
-# Todo Views
+# -------------------
+# ✅ Todo Views
+# -------------------
 
 class TodoListView(LoginRequiredMixin, ListView):
     model = Todo
-    template_name = 'todo/todo_list.html'
+    template_name = 'todo/todo_list.html'   # ✅
     paginate_by = 10
     ordering = ['-created_at']
     context_object_name = 'page_obj'
@@ -30,12 +31,12 @@ class TodoListView(LoginRequiredMixin, ListView):
 
 class TodoDetailView(LoginRequiredMixin, DetailView):
     model = Todo
-    template_name = 'todo/todo_info.html'
+    template_name = 'todo/todo_info.html'   # ✅
 
     def get_object(self, queryset=None):
         obj = super().get_object()
         if self.request.user != obj.user and not self.request.user.is_superuser:
-            raise Http404
+            raise Http404("해당 To Do를 볼 수 없습니다.")
         return obj
 
     def get_context_data(self, **kwargs):
@@ -56,7 +57,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
     form_class = TodoForm
-    template_name = 'todo/todo_create.html'
+    template_name = 'todo/todo_create.html'   # ✅
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -69,12 +70,12 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
     form_class = TodoUpdateForm
-    template_name = 'todo/todo_update.html'
+    template_name = 'todo/todo_update.html'   # ✅
 
     def get_object(self, queryset=None):
         obj = super().get_object()
         if self.request.user != obj.user and not self.request.user.is_superuser:
-            raise Http404
+            raise Http404("해당 To Do를 수정할 권한이 없습니다.")
         return obj
 
     def get_success_url(self):
@@ -83,19 +84,21 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
 
 class TodoDeleteView(LoginRequiredMixin, DeleteView):
     model = Todo
-    template_name = 'todo/todo_confirm_delete.html'
+    template_name = 'todo/todo_confirm_delete.html'   # ❗해당 파일은 templates 폴더에 없는 것 같아요
 
     def get_object(self, queryset=None):
         obj = super().get_object()
         if self.request.user != obj.user and not self.request.user.is_superuser:
-            raise Http404
+            raise Http404("해당 To Do를 삭제할 권한이 없습니다.")
         return obj
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo_list')
 
 
-# Comment Views
+# -------------------
+# ✅ Comment Views
+# -------------------
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
@@ -117,12 +120,12 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'todo/comment_form.html'
+    template_name = 'todo/comment_form.html'   # ✅ 템플릿이 필요함 (스크린샷엔 아직 없음)
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)
         if self.request.user != comment.user and not self.request.user.is_superuser:
-            raise Http404
+            raise Http404("해당 댓글을 수정할 권한이 없습니다.")
         return comment
 
     def get_success_url(self):
@@ -131,12 +134,12 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
-    template_name = 'todo/comment_confirm_delete.html'
+    template_name = 'todo/comment_confirm_delete.html'  # ✅ 템플릿이 필요함 (스크린샷엔 아직 없음)
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)
         if self.request.user != comment.user and not self.request.user.is_superuser:
-            raise Http404
+            raise Http404("해당 댓글을 삭제할 권한이 없습니다.")
         return comment
 
     def get_success_url(self):

@@ -6,9 +6,9 @@ from django_summernote.widgets import SummernoteWidget
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ["title", "description", "start_date", "end_date"]
+        fields = ['title', 'description', 'start_date', 'end_date']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '제목을 입력해주세요.'}),
             'description': SummernoteWidget(),
             'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
@@ -23,9 +23,9 @@ class TodoUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Todo
-        fields = ["title", "description", "start_date", "end_date", "is_completed", "completed_image"]
+        fields = ['title', 'description', 'start_date', 'end_date', 'is_completed', 'completed_image']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '제목을 입력해주세요.'}),
             'description': SummernoteWidget(),
             'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
